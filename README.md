@@ -11,8 +11,8 @@ This project transforms a repurposed Android device into a live edge sensor usin
 4. **The Automation Broker (Kali Linux):** A custom Python script (`broker.py`) connects to the honeypot via Tailscale SSH, extracts `cowrie.json` logs, and queries the **AbuseIPDB API** to append threat scores and geolocation.
 5. **The SIEM (Splunk Enterprise):** Receives the enriched JSON payload via the HTTP Event Collector (HEC) and translates it into actionable threat dashboards.
 
-![Description of image]()
-![Description of image](.\NotebookLMMindMap.png)
+![Architecture Diagram](Diagrams/ArchDiagram.png)
+![Mind Map](Diagrams/MindMap.png)
 
 ---
 
@@ -114,7 +114,7 @@ Instead of relying on third-party cloud tunnels like Pinggy, we separated the ne
     # Once we hit enter it will ask us to enter a password and when we enter a random password it should let us in to the Honeypot. 
     # It will accept the random passowords 99% of the times to lure the attackers. 
 ```
-   ![Description of image]()
+   ![Attacker SSH Example](Misc/AttackerSSHExample.JPG)
 
 ### Phase 3: The SIEM Pipeline (Kali Linux)
 1. **Install Splunk:**
@@ -151,7 +151,7 @@ Instead of relying on third-party cloud tunnels like Pinggy, we separated the ne
 
    * This ensures a continuous flow of enriched threat data into Splunk, ready for dashboard visualization and SPL querying.
 
-![Description of image]()
+![broker image](Misc/broker.png)
 ### Phase 5: Splunk Visualization & SPL Queries
 Once data was flowing, different visual panels were built using custom SPL:
 
@@ -164,7 +164,7 @@ Once data was flowing, different visual panels were built using custom SPL:
    | stats count by country
    | geom geo_countries featureIdField="country"
    ```
-   ![Description of image]()
+   ![Query 1 Visualization](SplunkScreenshots/Phase5-1.png)
 2. **Top Attackers Overview (Stats Table):**
    ```sql
    index="honeypot" eventid="cowrie.session.connect"
@@ -173,7 +173,7 @@ Once data was flowing, different visual panels were built using custom SPL:
    | rename src_ip as "Attacker IP", threat_intel.country_code as "Country", threat_intel.abuse_score as "AbuseIPDB Score", count as "Total Connections"
    | sort - "Total Connections"
    ```
-   ![Description of image]()
+   ![Query 2 Visualization](SplunkScreenshots/Phase5-2.png)
 
 3. **High-Fidelity Alerts (Score > 50):**
    ```sql
@@ -183,14 +183,14 @@ Once data was flowing, different visual panels were built using custom SPL:
    | rename src_ip as "Malicious IP", threat_intel.country_code as "Origin", threat_intel.abuse_score as "Threat Score"
    | sort - _time
    ```
-   ![Description of image]()
+   ![Query 3 Visualization](SplunkScreenshots/Phase5-3.png)
 4. **Attack Volumn by Country:**
    ```sql
    index="honeypot" eventid="cowrie.session.connect"
    | dedup _raw
    | timechart span=1h count by threat_intel.country_code
    ```
-   ![Description of image]()
+   ![Query 4 Visualization](SplunkScreenshots/Phase5-4.png)
 5. **Data Received time log:**
    * To Check if we are receiving the data from the honeypot every 5 mins.
    ```sql
@@ -198,7 +198,7 @@ Once data was flowing, different visual panels were built using custom SPL:
    | dedup _raw
    | timechart span=5m count
    ```
-   ![Description of image]()
+   ![Query 5 Visualization](SplunkScreenshots/Phase5-5.png)
 
 ---
 
