@@ -11,7 +11,7 @@ This project transforms a repurposed Android device into a live edge sensor usin
 4. **The Automation Broker (Kali Linux):** A custom Python script (`broker.py`) connects to the honeypot via Tailscale SSH, extracts `cowrie.json` logs, and queries the **AbuseIPDB API** to append threat scores and geolocation.
 5. **The SIEM (Splunk Enterprise):** Receives the enriched JSON payload via the HTTP Event Collector (HEC) and translates it into actionable threat dashboards.
 
-![Description of image]()
+![Description of image](.\Diagrams\Arch Diagram.png)
 ![Description of image](.\NotebookLMMindMap.png)
 
 ---
