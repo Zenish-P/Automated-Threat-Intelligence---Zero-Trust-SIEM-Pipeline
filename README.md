@@ -1,9 +1,9 @@
-# 🍯 Automated Threat Intelligence & Zero-Trust SIEM Pipeline (Cowrie Honeypot)
+# Automated Threat Intelligence & Zero-Trust SIEM Pipeline (Cowrie Honeypot)
 
-## 📄 Overview
+## Overview
 This project transforms a repurposed Android device into a live edge sensor using Termux and the Cowrie honeypot to capture real-world internet threats. Utilizing a decoupled architecture, it exposes the sensor via standard port forwarding, while a centralized Kali Linux broker automatically extracts, enriches, and forwards the threat data to a Splunk SIEM for real-time geographic visualization. To guarantee absolute security during log extraction, we implemented **Tailscale** to create an invisible, out-of-band management network which creates a tunnel between the Broker(our Kali Machine) and the sensor(the phone/honeypot) so that the broker can extract the data from the Honeypot from any network anywhere in the world.
 
-## 🏗️ Architecture & Network Flow
+## Architecture & Network Flow
 
 1. **The Edge Sensor (Redmi Note 7 Pro):** Runs Cowrie inside an isolated Termux Linux environment.
 2. **Public Exposure (Port Forwarding):** The honeypot's port 2222 is exposed directly to the public internet via the home router, serving as the trap for attacker,automated scanners and the botnets.
@@ -16,7 +16,7 @@ This project transforms a repurposed Android device into a live edge sensor usin
 
 ---
 
-## 🛠️ Tools, Technologies, & Libraries Used
+## Tools, Technologies, & Libraries Used
 
 ### **Hardware & OS**
 * **Sensor Node:** Old Android Phone (Redmi Note 7 Pro) running **Termux** (Android 10)
@@ -37,7 +37,7 @@ This project transforms a repurposed Android device into a live edge sensor usin
 
 ---
 
-## 🚀 Step-by-Step Implementation Guide
+## Step-by-Step Implementation Guide
 
 ### Phase 1: Deploying the Edge Sensor (Android/Termux)
 1. **Install Termux** via F-Droid (Because the Play Store version is depricated as the Phone has 2021 security and OS version).
@@ -202,7 +202,7 @@ Once data was flowing, different visual panels were built using custom SPL:
 
 ---
 
-## 🚧 Challenges & Troubleshooting Log
+## Challenges & Troubleshooting Log
 * **ISP Firewall Blocking (Bell Advanced Security):** Discovered that the ISP's built-in McAfee AI shield silently dropped incoming SSH connections to Port 2222, overriding standard port forwarding rules. Solved by bypassing the advanced shield settings in the Bell Wi-Fi app.
 * **Bypassing Mobile ARM Architecture Limitations:** `pip` failed to compile cryptography libraries from raw C/Rust. Solved by installing pre-compiled binaries via the Termux `pkg` manager and creating a `PYTHONPATH` bridge for the virtual environment.
 * **Android Battery Optimization (TimeoutErrors):** Aggressive background app management killed the `sshd` daemon. Solved by forcefully acquiring an Android Wakelock.
@@ -211,7 +211,7 @@ Once data was flowing, different visual panels were built using custom SPL:
 
 ---
 
-## 🔮 Pontential Future improvements
+## Potential Future improvements
 If I were to work on it furthur and improve the current project, here are some recommendations:
 1. **Automated Threat Response (SOAR):** Integrate a SOAR (Security Orchestration, Automation, and Response) capability into the broker.py script. If an attacker's IP returns an AbuseIPDB score of 100, the script could automatically trigger an API call to a perimeter firewall (or cloud WAF) to permanently block that IP across the entire network.
 
